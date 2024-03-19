@@ -4,9 +4,9 @@ import { ReactComponent as SunIcon } from 'assets/icon-sun.svg'
 import styles from './ThemeSwitcher.module.scss';
 import { useEffect, useState } from 'react';
 
-const ThemeSwitcher = () => {
+export const ThemeSwitcher = () => {
   const [isDark, setDark] = useState(
-    localStorage.getItem('theme') === 'true'
+    localStorage.getItem('theme') === 'true' || false
   );
   const themeText = isDark ? 'Dark' : 'Light';
   const ThemeIcon = isDark ? SunIcon : MoonIcon;
@@ -16,9 +16,11 @@ const ThemeSwitcher = () => {
   }, [isDark]);
 
   const handleThemeChange = () => {
+    const value = !isDark
+    localStorage.setItem('theme', value.toString());
     setDark((prevState) => !prevState);
-    localStorage.setItem('theme', isDark.toString());
   };
+
 
   return (
     <div className={styles.switcher} onClick={handleThemeChange}>
@@ -28,4 +30,3 @@ const ThemeSwitcher = () => {
   );
 };
 
-export default ThemeSwitcher;
