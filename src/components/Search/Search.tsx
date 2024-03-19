@@ -1,6 +1,5 @@
 import { ReactComponent as SearchIcon } from 'assets/icon-search.svg'
 import styles from './Search.module.scss';
-import { useRef } from 'react';
 import { Button } from 'components/Button';
 
 interface SearchProps {
@@ -9,16 +8,18 @@ interface SearchProps {
 }
 
 export const Search = ({ hasError, onSubmit }: SearchProps) => {
-  const searchRef = useRef<HTMLInputElement | null>(null)
 
-  const handleSubmit = (event: React.FormEvent) => {
+  type FormFields = {
+    username: HTMLInputElement
+  }
+
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement & FormFields>) => {
     event.preventDefault()
+    const text = event.currentTarget.username.value
 
-    const text = searchRef.current ? searchRef.current.value : ''
     if (text) {
       onSubmit(text)
-      if (searchRef.current)
-        searchRef.current.value = ''
+      event.currentTarget.reset()
     }
   }
 
@@ -29,7 +30,6 @@ export const Search = ({ hasError, onSubmit }: SearchProps) => {
           <SearchIcon />
         </label>
         <input
-          ref={searchRef}
           type="text"
           className={styles.textField}
           id='search'
